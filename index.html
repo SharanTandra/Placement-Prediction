@@ -1,0 +1,2153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sreyas Placement Portal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            /* background: linear-gradient(135deg, #0066cc 0%, #003d7a 100%); */
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-box h1 {
+            color: #0066cc;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .login-box h2 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 400;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0066cc;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #0052a3;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            padding: 8px 16px;
+            font-size: 14px;
+            width: auto;
+            margin-top: 10px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            width: auto;
+            display: inline-block;
+            margin: 5px 5px 5px 0;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+        }
+
+        .dashboard {
+            display: none;
+        }
+
+        .navbar {
+            background: #0066cc;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .navbar h1 {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nav-links button {
+            padding: 10px 20px;
+            background: transparent;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-links button:hover,
+        .nav-links button.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-links .logout-btn {
+            background: #dc3545;
+        }
+
+        .nav-links .logout-btn:hover {
+            background: #c82333;
+        }
+
+        .content {
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .profile-header {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .profile-pic-section {
+            text-align: center;
+        }
+
+        .profile-pic-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #0066cc;
+            overflow: hidden;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-pic-placeholder {
+            font-size: 60px;
+            color: #0066cc;
+            font-weight: 700;
+        }
+
+        .profile-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #0066cc;
+        }
+
+        .info-card h4 {
+            color: #0066cc;
+            font-size: 14px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .info-card .value {
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .profile-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-section h3 {
+            color: #0066cc;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 10px;
+        }
+
+        .skill-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .skill-tag {
+            background: #0066cc;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skill-tag button {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .upload-area {
+            border: 2px dashed #0066cc;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover {
+            background: #e9ecef;
+        }
+
+        .upload-area input[type="file"] {
+            display: none;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .item-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            position: relative;
+        }
+
+        .item-card h4 {
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+
+        .item-card p {
+            color: #666;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .job-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .job-filters button {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #0066cc;
+            color: #0066cc;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .job-filters button.active {
+            background: #0066cc;
+            color: white;
+        }
+
+        .job-card {
+            background: white;
+            border-left: 4px solid #0066cc;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .job-card h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .job-card .company {
+            color: #0066cc;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .job-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .job-detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .job-detail-item strong {
+            color: #555;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+
+        .job-detail-item span {
+            color: #333;
+        }
+
+        .job-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .resume-upload-job {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: 500px;
+            width: 500px;
+        }
+
+        .chart-container h3 {
+            color: #0066cc;
+            margin-bottom: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #0066cc;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h4 {
+            font-size: 14px;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .ideas-container {
+            display: grid;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .idea-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #0066cc;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .idea-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .idea-header h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .idea-domain {
+            background: #0066cc;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .like-btn {
+            background: white;
+            border: 2px solid #0066cc;
+            color: #0066cc;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .like-btn.liked {
+            background: #0066cc;
+            color: white;
+        }
+
+        .ats-result {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .ats-result h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .ats-result ul {
+            margin-left: 20px;
+        }
+
+        .ats-result li {
+            color: #856404;
+            margin: 5px 0;
+        }
+
+        @media (max-width: 768px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .profile-header {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .profile-pic-section {
+                margin: 0 auto;
+            }
+        }
+
+        .file-preview {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
+    <!-- <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script> -->
+</head>
+
+<body>
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <h1>Sreyas Placement Portal</h1>
+            <h2>Student Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Student ID</label>
+                    <input type="text" id="studentId" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="dashboard" class="dashboard">
+        <nav class="navbar">
+            <h1>Sreyas Placement Portal</h1>
+            <div class="nav-links">
+                <button onclick="showPage('profile')" class="active">Student Profile</button>
+                <button onclick="showPage('hirings')">Current Hirings</button>
+                <button onclick="showPage('analysis')">Placement Analysis</button>
+                <button onclick="showPage('startups')">Startup Ideas</button>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+
+        <div class="content">
+            <div id="profilePage" class="page active">
+                <div class="profile-header">
+                    <div class="profile-pic-section">
+                        <div class="profile-pic-container" onclick="document.getElementById('profilePicInput').click()">
+                            <div id="profilePicPreview" class="profile-pic-placeholder">JD</div>
+                            <input type="file" id="profilePicInput" accept="image/*" onchange="uploadProfilePic(event)"
+                                style="display: none;">
+                        </div>
+                        <button class="btn btn-small"
+                            onclick="document.getElementById('profilePicInput').click()">Upload Photo</button>
+                    </div>
+
+                    <div class="profile-info-grid">
+                        <div class="info-card">
+                            <h4>Name</h4>
+                            <div class="value" id="displayName">John Doe</div>
+                        </div>
+                        <div class="info-card">
+                            <h4>Roll Number</h4>
+                            <div class="value" id="displayRoll">22R01A0501</div>
+                        </div>
+                        <div class="info-card">
+                            <h4>Stream</h4>
+                            <div class="value" id="displayStream">CSE</div>
+                        </div>
+                        <div class="info-card">
+                            <h4>CGPA</h4>
+                            <div class="value" id="displayCGPA">8.5</div>
+                        </div>
+                        <div class="info-card">
+                            <h4>Internships</h4>
+                            <div class="value" id="displayInternships">0</div>
+                        </div>
+                        <div class="info-card">
+                            <h4>Projects</h4>
+                            <div class="value" id="displayProjects">0</div>
+                        </div>
+                        <div class="info-card">
+                            <h4>Skills</h4>
+                            <div class="value" id="displaySkills">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="color: #0066cc; margin-bottom: 20px;">Student Details</h2>
+
+                <div class="profile-grid">
+                    <div class="profile-section">
+                        <h3>Personal Information</h3>
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" id="studentName" placeholder="Enter your name"
+                                onchange="updateDisplay()">
+                        </div>
+                        <div class="form-group">
+                            <label>Roll Number</label>
+                            <input type="text" id="rollNumber" placeholder="Enter roll number"
+                                onchange="updateDisplay()">
+                        </div>
+                        <div class="form-group">
+                            <label>Stream/Branch</label>
+                            <select id="stream" onchange="updateDisplay()">
+                                <option value="">Select Stream</option>
+                                <option value="CSE">Computer Science Engineering</option>
+                                <option value="CSE-AIML">CSE - AI & ML</option>
+                                <option value="CSE-DS">CSE - Data Science</option>
+                                <option value="ECE">Electronics & Communication</option>
+                                <option value="MECH">Mechanical Engineering</option>
+                                <option value="CIVIL">Civil Engineering</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Date of Birth</label>
+                            <input type="date" id="dob">
+                        </div>
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select id="gender">
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="phone" placeholder="Enter phone number">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="email" placeholder="Enter email">
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Academic Details</h3>
+                        <div class="form-group">
+                            <label>CGPA</label>
+                            <input type="number" id="cgpa" step="0.01" min="0" max="10" placeholder="Enter CGPA"
+                                onchange="updateDisplay()">
+                        </div>
+                        <div class="form-group">
+                            <label>Technical Skills</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="skillInput" placeholder="Add a skill">
+                                <button type="button" class="btn btn-small" onclick="addSkill()">Add</button>
+                            </div>
+                            <div id="skillsContainer" class="skill-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section" style="margin-bottom: 30px;">
+                    <h3>Resume Upload</h3>
+                    <div class="upload-area" onclick="document.getElementById('resumeInput').click()">
+                        <p>📄 Click to upload your resume (PDF, DOC, DOCX)</p>
+                        <input type="file" id="resumeInput" accept=".pdf,.doc,.docx" onchange="uploadResume(event)">
+                    </div>
+                    <div id="resumePreview" class="file-preview" style="display: none;"></div>
+                    <div id="atsAnalysis"></div>
+                </div>
+
+                <div class="profile-grid">
+                    <div class="profile-section">
+                        <h3>Certifications</h3>
+                        <button class="btn btn-secondary" onclick="showModal('cert')">Add Certification</button>
+                        <div id="certContainer" class="items-grid"></div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Internships</h3>
+                        <button class="btn btn-secondary" onclick="showModal('intern')">Add Internship</button>
+                        <div id="internContainer" class="items-grid"></div>
+                    </div>
+                </div>
+
+                <div class="profile-section" style="margin-top: 30px;">
+                    <h3>Projects</h3>
+                    <button class="btn btn-secondary" onclick="showModal('project')">Add Project</button>
+                    <div id="projectContainer" class="items-grid"></div>
+                </div>
+
+                <div class="profile-section" style="margin-top: 30px;">
+                    <h3>Skill Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="skillChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div id="hiringsPage" class="page">
+                <h2 style="color: #0066cc; margin-bottom: 30px;">Current Hirings</h2>
+
+                <div class="job-filters">
+                    <button class="active" onclick="filterJobs('all')">All Jobs</button>
+                    <button onclick="filterJobs('mnc')">MNCs</button>
+                    <button onclick="filterJobs('startup')">Startups</button>
+                </div>
+
+                <div id="jobsContainer"></div>
+            </div>
+
+            <div id="analysisPage" class="page">
+                <h2 style="color: #0066cc; margin-bottom: 30px;">Placement Analysis</h2>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>Total Offers</h4>
+                        <div class="value">245</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Highest Package</h4>
+                        <div class="value">₹45 LPA</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Average Package</h4>
+                        <div class="value">₹12 LPA</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Lowest Package</h4>
+                        <div class="value">₹4 LPA</div>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Placement Overview</h3>
+                        <canvas id="placementChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Company-wise Placements</h3>
+                        <canvas id="companyChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Branch-wise Analysis</h3>
+                        <canvas id="branchChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Year-wise Trend</h3>
+                        <canvas id="yearChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Package Distribution</h3>
+                        <canvas id="packageChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Eligibility Status</h3>
+                        <canvas id="eligibilityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div id="startupsPage" class="page">
+                <h2 style="color: #0066cc; margin-bottom: 30px;">Startup Ideas</h2>
+
+                <div class="profile-section">
+                    <h3>Submit Your Idea</h3>
+                    <form id="ideaForm">
+                        <div class="form-group">
+                            <label>Idea Title</label>
+                            <input type="text" id="ideaTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Domain</label>
+                            <select id="ideaDomain" required>
+                                <option value="">Select Domain</option>
+                                <option value="Technology">Technology</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Education">Education</option>
+                                <option value="Finance">Finance</option>
+                                <option value="E-commerce">E-commerce</option>
+                                <option value="Agriculture">Agriculture</option>
+                                <option value="Environment">Environment</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Problem Statement</label>
+                            <textarea id="ideaProblem" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Proposed Solution</label>
+                            <textarea id="ideaSolution" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Technology Used</label>
+                            <input type="text" id="ideaTech" required>
+                        </div>
+                        <button type="submit" class="btn">Submit Idea</button>
+                    </form>
+                </div>
+
+                <div id="ideasContainer" class="ideas-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; overflow-y: auto;">
+        <div style="background: white; max-width: 500px; margin: 50px auto; padding: 30px; border-radius: 10px;">
+            <h3 id="modalTitle" style="color: #0066cc; margin-bottom: 20px;"></h3>
+            <form id="modalForm">
+                <div id="modalFields"></div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn">Add</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        let studentData = { skills: [], certifications: [], internships: [], projects: [], resume: null, profilePic: null };
+        let currentModal = '';
+        let skills = [];
+        let jobsData = [
+            { type: 'mnc', role: 'Software Developer', company: 'Google', description: 'Develop and maintain large-scale applications', skills: ['Java', 'Python', 'Cloud Computing', 'Problem Solving'], location: 'Bangalore, Hyderabad', package: '₹25-30 LPA' },
+            { type: 'mnc', role: 'Data Analyst', company: 'Microsoft', description: 'Analyze data and provide insights', skills: ['SQL', 'Python', 'Data Visualization', 'Statistics'], location: 'Bangalore', package: '₹18-22 LPA' },
+            { type: 'startup', role: 'Full Stack Developer', company: 'TechStartup Inc', description: 'Build innovative web applications', skills: ['React', 'Node.js', 'MongoDB', 'JavaScript'], location: 'Remote', package: '₹8-12 LPA' },
+            { type: 'startup', role: 'Frontend Developer', company: 'InnovateLabs', description: 'Create responsive user interfaces', skills: ['HTML', 'CSS', 'JavaScript', 'React'], location: 'Pune', package: '₹6-10 LPA' },
+            { type: 'mnc', role: 'Cloud Engineer', company: 'Amazon', description: 'Design and manage cloud infrastructure', skills: ['AWS', 'Docker', 'Kubernetes', 'Linux'], location: 'Chennai, Bangalore', package: '₹20-25 LPA' }
+        ];
+        let ideasData = [];
+        let jobResumes = {};
+        // ===== HELPER FUNCTIONS - ADD THESE =====
+
+        function getAuthHeaders() {
+            const token = localStorage.getItem('auth_token');
+            return {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            };
+        }
+
+        async function fetchStudentProfile() {
+            const response = await fetch('http://localhost:5000/api/student/profile', {
+                method: 'GET',
+                headers: getAuthHeaders()
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch profile');
+            }
+
+            return await response.json();
+        }
+
+        async function fetchJobs(filter = 'all') {
+            const response = await fetch('http://localhost:5000/api/jobs', {
+                method: 'GET',
+                headers: getAuthHeaders()
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch jobs');
+            }
+
+            const jobs = await response.json();
+
+            return jobs.map(job => ({
+                id: job.id,
+                type: job.type,
+                role: job.role,
+                company: job.company,
+                description: job.description,
+                skills: job.skills || [],
+                location: job.location,
+                package: job.package || `₹${job.package_min}-${job.package_max} LPA`,
+                package_min: job.package_min,
+                package_max: job.package_max,
+                min_cgpa: job.min_cgpa,
+                applications_count: job.applications_count || 0
+            }));
+        }
+
+        // Wait for page to load before adding event listeners
+        window.addEventListener('DOMContentLoaded', function () {
+            const loginForm = document.getElementById('loginForm');
+            const ideaForm = document.getElementById('ideaForm');
+            const modalForm = document.getElementById('modalForm');
+
+            if (loginForm) {
+                loginForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    login(e);
+                });
+            }
+
+            if (ideaForm) {
+                ideaForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    submitIdea(e);
+                });
+            }
+
+            if (modalForm) {
+                modalForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    addItem(e);
+                });
+            }
+        });
+
+        async function login(e) {
+            e.preventDefault();
+
+            const studentId = document.getElementById('studentId').value;
+            const password = document.getElementById('password').value;
+
+            console.log('Login attempt:', studentId); // Debug log
+
+            // Detect if admin login
+            const isAdmin = studentId.toLowerCase() === 'admin';
+
+            const endpoint = isAdmin ?
+                'http://localhost:5000/api/admin/login' :
+                'http://localhost:5000/api/auth/login';
+
+            const requestBody = isAdmin ?
+                { username: studentId, password: password } :
+                { student_id: studentId, password: password };
+
+            console.log('Endpoint:', endpoint); // Debug log
+            console.log('Body:', requestBody); // Debug log
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+                console.log('Response:', data); // Debug log
+
+                if (!response.ok) {
+                    alert('Login failed: ' + data.error);
+                    return;
+                }
+
+                // Store token
+                localStorage.setItem('auth_token', data.access_token);
+                localStorage.setItem('user_info', JSON.stringify(data));
+
+                console.log('Login successful!');
+
+                // Show dashboard
+                // Show dashboard
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+
+                if (isAdmin) {
+                    // ADMIN MODE
+                    console.log('Admin logged in');
+
+                    // Store admin flag
+                    localStorage.setItem('is_admin', 'true');
+
+                    // Hide student-only features
+                    const studentOnlyButtons = document.querySelectorAll('.nav-links button');
+                    studentOnlyButtons.forEach(btn => {
+                        if (btn.textContent.includes('Student Profile')) {
+                            btn.style.display = 'none';
+                        }
+                    });
+
+                    // Show admin controls
+                    setupAdminControls();
+
+                    // Load jobs in admin mode
+                    await loadJobsAdmin();
+
+                    // Switch to hirings page
+                    showPage('hirings');
+
+                } else {
+                    console.log('Student logged in');
+                    localStorage.setItem('is_admin', 'false');
+
+                    // Load student profile
+                    try {
+                        await loadStudentProfile();
+                        console.log('Student profile loaded');
+                    } catch (error) {
+                        console.error('Failed to load student profile:', error);
+                    }
+
+                    // Load jobs for student
+                    try {
+                        await loadJobs('all');
+                        console.log('Jobs loaded for student');
+                    } catch (error) {
+                        console.error('Failed to load jobs:', error);
+                    }
+                }
+
+                if (typeof initCharts === 'function') {
+                    initCharts();
+                }
+
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Login failed: ' + error.message);
+            }
+        }
+
+        // Add this new function
+        async function loadStudentProfile() {
+            try {
+                const profile = await fetchStudentProfile();
+
+                // Update form fields
+                if (profile.name) document.getElementById('studentName').value = profile.name;
+                if (profile.roll_number) document.getElementById('rollNumber').value = profile.roll_number;
+                if (profile.stream) document.getElementById('stream').value = profile.stream;
+                if (profile.cgpa) document.getElementById('cgpa').value = profile.cgpa;
+                if (profile.email) document.getElementById('email').value = profile.email;
+                if (profile.phone) document.getElementById('phone').value = profile.phone;
+                if (profile.gender) document.getElementById('gender').value = profile.gender;
+                if (profile.dob) document.getElementById('dob').value = profile.dob;
+
+                // Load skills
+                skills = profile.skills.map(s => s.name);
+                studentData.skills = profile.skills;
+                updateSkillsDisplay();
+
+                // Load other data
+                studentData.certifications = profile.certifications || [];
+                studentData.internships = profile.internships || [];
+                studentData.projects = profile.projects || [];
+
+                displayItems('certifications', 'certContainer');
+                displayItems('internships', 'internContainer');
+                displayItems('projects', 'projectContainer');
+
+                updateDisplay();
+
+            } catch (error) {
+                console.error('Failed to load profile:', error);
+            }
+        }
+
+        // Add this function to load jobs from API
+        async function loadJobs(filter) {
+            try {
+                const jobs = await fetchJobs(filter);
+                jobsData = jobs;
+                displayJobsUI(filter);
+            } catch (error) {
+                console.error('Failed to load jobs:', error);
+                alert('Could not load jobs. Please try again.');
+            }
+        }
+
+
+        // Rename existing displayJobs to displayJobsUI
+        function displayJobsUI(filter) {
+            console.log('Displaying jobs UI, filter:', filter);
+            console.log('Total jobs:', jobsData.length);
+
+            const container = document.getElementById('jobsContainer');
+            if (!container) {
+                console.error('Jobs container not found!');
+                return;
+            }
+
+            const filtered = filter === 'all' ? jobsData : jobsData.filter(j => j.type === filter || j.job_type === filter);
+
+            console.log('Filtered jobs:', filtered.length);
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+            <div style="background: #fff3cd; padding: 20px; border-radius: 10px; color: #856404;">
+                <h3>📋 No Jobs Available</h3>
+                <p>There are currently no job postings. Check back later!</p>
+            </div>
+        `;
+                return;
+            }
+
+            container.innerHTML = filtered.map((job) => {
+                const idx = jobsData.indexOf(job);
+                const userSkills = skills.map(s => s.toLowerCase());
+
+                // Handle skills being either array or string
+                let jobSkills = [];
+                if (Array.isArray(job.skills)) {
+                    jobSkills = job.skills;
+                } else if (typeof job.skills === 'string') {
+                    try {
+                        jobSkills = JSON.parse(job.skills);
+                    } catch {
+                        jobSkills = [];
+                    }
+                }
+
+                const reqSkills = jobSkills.map(s => s.toLowerCase());
+                const matchingSkills = reqSkills.filter(s => userSkills.some(us => us.includes(s) || s.includes(us)));
+
+                return `<div class="job-card">
+    <h3>${job.role || 'Untitled Role'}</h3>
+    <div class="company">${job.company || 'Unknown Company'}</div>
+    <p>${job.description || 'No description available'}</p>
+    <div class="job-details">
+        <div class="job-detail-item"><strong>SKILLS REQUIRED</strong><span>${jobSkills.join(', ') || 'Not specified'}</span></div>
+        <div class="job-detail-item"><strong>LOCATION</strong><span>${job.location || 'Not specified'}</span></div>
+        <div class="job-detail-item"><strong>PACKAGE</strong><span>${job.package || 'Not specified'}</span></div>
+    </div>
+    <div class="job-actions">
+        <button class="btn btn-small btn-info" onclick="toggleResumeUpload(${idx})">Upload Resume for ATS Check</button>
+        <button id="applyBtn_${idx}" class="btn btn-small btn-danger" disabled onclick="applyJob(${idx})">Insufficient Skills</button>
+    </div>
+    <div id="resume_upload_${idx}" class="resume-upload-job">
+        <div class="upload-area" onclick="document.getElementById('jobResume_${idx}').click()">
+            <p>📄 Upload Resume (PDF only for accurate skill detection)</p>
+            <input type="file" id="jobResume_${idx}" accept=".pdf" onchange="analyzeJobResume(event, ${idx})">
+        </div>
+        <div id="job_resume_preview_${idx}" class="file-preview" style="display: none;"></div>
+    </div>
+    <div id="ats_${idx}"></div>
+</div>`;
+            }).join('');
+
+            console.log('Jobs displayed successfully');
+        }
+
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_info');
+            localStorage.removeItem('is_admin');
+
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginForm').reset();
+
+            studentData = { skills: [], certifications: [], internships: [], projects: [], resume: null, profilePic: null };
+            skills = [];
+
+            window.location.reload();
+        }
+
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+
+            const pages = {
+                'profile': 'profilePage',
+                'hirings': 'hiringsPage',
+                'analysis': 'analysisPage',
+                'startups': 'startupsPage'
+            };
+
+            document.getElementById(pages[page]).classList.add('active');
+
+            // Find and activate the correct nav button
+            document.querySelectorAll('.nav-links button').forEach(btn => {
+                const btnText = btn.textContent.toLowerCase();
+                if (
+                    (page === 'profile' && btnText.includes('profile')) ||
+                    (page === 'hirings' && btnText.includes('hirings')) ||
+                    (page === 'analysis' && btnText.includes('analysis')) ||
+                    (page === 'startups' && btnText.includes('startup'))
+                ) {
+                    btn.classList.add('active');
+                }
+            });
+
+            if (page === 'analysis') setTimeout(initCharts, 100);
+        }
+
+        function uploadProfilePic(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    studentData.profilePic = event.target.result;
+                    document.getElementById('profilePicPreview').innerHTML = `<img src="${event.target.result}" alt="Profile">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updateDisplay() {
+            const name = document.getElementById('studentName').value || 'John Doe';
+            const roll = document.getElementById('rollNumber').value || '22R01A0501';
+            const stream = document.getElementById('stream').value || 'CSE';
+            const cgpa = document.getElementById('cgpa').value || '8.5';
+
+            document.getElementById('displayName').textContent = name;
+            document.getElementById('displayRoll').textContent = roll;
+            document.getElementById('displayStream').textContent = stream;
+            document.getElementById('displayCGPA').textContent = cgpa;
+            document.getElementById('displaySkills').textContent = skills.length;
+            document.getElementById('displayInternships').textContent = studentData.internships.length;
+            document.getElementById('displayProjects').textContent = studentData.projects.length;
+
+            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+            if (!studentData.profilePic) {
+                document.getElementById('profilePicPreview').textContent = initials;
+            }
+        }
+
+        function addSkill() {
+            const input = document.getElementById('skillInput');
+            const skill = input.value.trim();
+            if (skill && !skills.includes(skill)) {
+                skills.push(skill);
+                studentData.skills.push(skill);
+                updateSkillsDisplay();
+                input.value = '';
+                updateSkillChart();
+                updateDisplay();
+            }
+        }
+
+        function removeSkill(skill) {
+            skills = skills.filter(s => s !== skill);
+            studentData.skills = studentData.skills.filter(s => s !== skill);
+            updateSkillsDisplay();
+            updateSkillChart();
+            updateDisplay();
+        }
+
+        function updateSkillsDisplay() {
+            const container = document.getElementById('skillsContainer');
+            container.innerHTML = skills.map(skill => `<div class="skill-tag">${skill}<button onclick="removeSkill('${skill}')">×</button></div>`).join('');
+        }
+
+        function uploadResume(e) {
+            const file = e.target.files[0];
+            if (file) {
+                studentData.resume = file;
+                document.getElementById('resumePreview').style.display = 'block';
+                document.getElementById('resumePreview').textContent = `Uploaded: ${file.name}`;
+                setTimeout(() => {
+                    document.getElementById('atsAnalysis').innerHTML = `<div class="ats-result"><h4>ATS Analysis Results</h4><p><strong>Match Score:</strong> 78%</p><p><strong>Suggestions:</strong></p><ul><li>Add more quantifiable achievements</li><li>Include keywords: Cloud Computing, DevOps, Agile</li><li>Optimize formatting for better parsing</li><li>Add relevant certifications section</li></ul></div>`;
+                }, 1000);
+            }
+        }
+
+        function showModal(type) {
+            currentModal = type;
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modalTitle');
+            const fields = document.getElementById('modalFields');
+            const configs = {
+                cert: { title: 'Add Certification', fields: [{ name: 'name', label: 'Certification Name', type: 'text' }, { name: 'issuer', label: 'Issuing Organization', type: 'text' }, { name: 'date', label: 'Date Obtained', type: 'date' }] },
+                intern: { title: 'Add Internship', fields: [{ name: 'company', label: 'Company Name', type: 'text' }, { name: 'role', label: 'Role', type: 'text' }, { name: 'duration', label: 'Duration', type: 'text' }, { name: 'description', label: 'Description', type: 'textarea' }] },
+                project: { title: 'Add Project', fields: [{ name: 'name', label: 'Project Name', type: 'text' }, { name: 'tech', label: 'Technologies Used', type: 'text' }, { name: 'description', label: 'Description', type: 'textarea' }] }
+            };
+            const config = configs[type];
+            title.textContent = config.title;
+            fields.innerHTML = config.fields.map(f => `<div class="form-group"><label>${f.label}</label>${f.type === 'textarea' ? `<textarea id="modal_${f.name}" rows="3" required></textarea>` : `<input type="${f.type}" id="modal_${f.name}" required>`}</div>`).join('');
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('modalForm').reset();
+        }
+
+        function addItem(e) {
+            e.preventDefault();
+            const formData = {};
+            const inputs = document.querySelectorAll('#modalFields input, #modalFields textarea');
+            inputs.forEach(input => {
+                const key = input.id.replace('modal_', '');
+                formData[key] = input.value;
+            });
+            if (currentModal === 'cert') {
+                studentData.certifications.push(formData);
+                displayItems('certifications', 'certContainer');
+            } else if (currentModal === 'intern') {
+                studentData.internships.push(formData);
+                displayItems('internships', 'internContainer');
+            } else if (currentModal === 'project') {
+                studentData.projects.push(formData);
+                displayItems('projects', 'projectContainer');
+            }
+            updateDisplay();
+            closeModal();
+        }
+
+        function displayItems(type, containerId) {
+            const container = document.getElementById(containerId);
+            const items = studentData[type];
+            container.innerHTML = items.map((item, idx) => {
+                if (type === 'certifications') {
+                    return `<div class="item-card"><button class="remove-btn" onclick="removeItem('${type}', ${idx})">×</button><h4>${item.name}</h4><p><strong>Issuer:</strong> ${item.issuer}</p><p><strong>Date:</strong> ${item.date}</p></div>`;
+                } else if (type === 'internships') {
+                    return `<div class="item-card"><button class="remove-btn" onclick="removeItem('${type}', ${idx})">×</button><h4>${item.role}</h4><p><strong>Company:</strong> ${item.company}</p><p><strong>Duration:</strong> ${item.duration}</p><p>${item.description}</p></div>`;
+                } else if (type === 'projects') {
+                    return `<div class="item-card"><button class="remove-btn" onclick="removeItem('${type}', ${idx})">×</button><h4>${item.name}</h4><p><strong>Tech:</strong> ${item.tech}</p><p>${item.description}</p></div>`;
+                }
+            }).join('');
+        }
+
+        function removeItem(type, idx) {
+            studentData[type].splice(idx, 1);
+            const containers = { certifications: 'certContainer', internships: 'internContainer', projects: 'projectContainer' };
+            displayItems(type, containers[type]);
+            updateDisplay();
+        }
+
+        async function extractTextFromPDF(file) {
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                let fullText = '';
+
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(' ');
+                    fullText += pageText + ' ';
+                }
+
+                return fullText;
+            } catch (error) {
+                console.error('PDF extraction error:', error);
+                return '';
+            }
+        }
+
+        // Check if current user is admin
+        function isAdminUser() {
+            return localStorage.getItem('is_admin') === 'true';
+        }
+
+        // Setup admin controls
+        function setupAdminControls() {
+            // Change navbar title
+            const navbarTitle = document.querySelector('.navbar h1');
+            if (navbarTitle) {
+                navbarTitle.textContent = 'Sreyas Placement Portal - ADMIN PANEL';
+                navbarTitle.style.background = 'linear-gradient(to right, #dc3545, #c82333)';
+                navbarTitle.style.padding = '10px';
+                navbarTitle.style.borderRadius = '5px';
+            }
+        }
+        // Load jobs in admin mode
+        async function loadJobsAdmin() {
+            console.log('Loading admin jobs...'); // Debug
+
+            try {
+                const token = localStorage.getItem('auth_token');
+                if (!token) {
+                    throw new Error('No authentication token found');
+                }
+
+                const response = await fetch('http://localhost:5000/api/admin/jobs', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                console.log('Response status:', response.status); // Debug
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || `HTTP ${response.status}`);
+                }
+
+                const jobs = await response.json();
+                console.log('Jobs loaded:', jobs); // Debug
+
+                // Ensure jobs is an array
+                if (!Array.isArray(jobs)) {
+                    throw new Error('Invalid response format - expected array');
+                }
+
+                jobsData = jobs;
+                displayJobsAdmin('all');
+
+            } catch (error) {
+                console.error('Failed to load jobs:', error);
+
+                // Show error to user
+                const container = document.getElementById('jobsContainer');
+                if (container) {
+                    container.innerHTML = `
+                <div style="background: #f8d7da; padding: 20px; border-radius: 10px; color: #721c24; border: 1px solid #f5c6cb;">
+                    <h3>⚠️ Error Loading Jobs</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Troubleshooting:</strong></p>
+                    <ul>
+                        <li>Make sure the Flask backend is running on http://localhost:5000</li>
+                        <li>Check that you're logged in as admin</li>
+                        <li>Check browser console (F12) for more details</li>
+                    </ul>
+                    <button class="btn" onclick="loadJobsAdmin()" style="margin-top: 10px;">🔄 Retry</button>
+                </div>
+            `;
+                }
+            }
+        }
+
+        // Display jobs in admin mode with management controls
+        function displayJobsAdmin(filter) {
+            const container = document.getElementById('jobsContainer');
+            const filtered = filter === 'all' ? jobsData : jobsData.filter(j => j.type === filter);
+
+            // Add "Create New Job" button
+            let html = `
+        <div style="margin-bottom: 30px;">
+            <button class="btn" onclick="showCreateJobForm()" style="background: #28a745;">
+                ➕ Create New Job Posting
+            </button>
+        </div>
+        
+        <div id="createJobForm" style="display: none; background: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <h3 style="color: #0066cc; margin-bottom: 20px;">Create New Job</h3>
+            <div class="form-group">
+                <label>Job Type</label>
+                <select id="newJobType">
+                    <option value="mnc">MNC</option>
+                    <option value="startup">Startup</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <input type="text" id="newJobRole" placeholder="e.g., Software Developer">
+            </div>
+            <div class="form-group">
+                <label>Company</label>
+                <input type="text" id="newJobCompany" placeholder="e.g., Google">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="newJobDescription" rows="3" placeholder="Job description"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Required Skills (comma-separated)</label>
+                <input type="text" id="newJobSkills" placeholder="e.g., Java, Python, AWS">
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" id="newJobLocation" placeholder="e.g., Bangalore, Hyderabad">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                    <label>Min Package (LPA)</label>
+                    <input type="number" id="newJobPackageMin" placeholder="e.g., 10">
+                </div>
+                <div class="form-group">
+                    <label>Max Package (LPA)</label>
+                    <input type="number" id="newJobPackageMax" placeholder="e.g., 15">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Minimum CGPA</label>
+                <input type="number" step="0.1" id="newJobMinCGPA" placeholder="e.g., 7.0">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn" onclick="createNewJob()">Create Job</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('createJobForm').style.display='none'">Cancel</button>
+            </div>
+        </div>
+    `;
+
+            // Display existing jobs
+            html += filtered.map((job, index) => {
+                // Safely access properties with fallbacks - THIS PREVENTS ERRORS
+                const jobType = job.type || job.job_type || 'unknown';
+                const skills = Array.isArray(job.skills) ? job.skills : [];
+                const appCount = job.applications_count || 0;
+                const packageMin = job.package_min || 0;
+                const packageMax = job.package_max || 0;
+
+                return `<div class="job-card">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div style="flex: 1;">
+                <h3>${job.role || 'Untitled Role'}</h3>
+                <div class="company">${job.company || 'Unknown Company'}</div>
+                <p>${job.description || 'No description available'}</p>
+                <div class="job-details">
+                    <div class="job-detail-item"><strong>TYPE</strong><span>${jobType.toUpperCase()}</span></div>
+                    <div class="job-detail-item"><strong>SKILLS</strong><span>${skills.length > 0 ? skills.join(', ') : 'None specified'}</span></div>
+                    <div class="job-detail-item"><strong>LOCATION</strong><span>${job.location || 'Not specified'}</span></div>
+                    <div class="job-detail-item"><strong>PACKAGE</strong><span>₹${packageMin}-${packageMax} LPA</span></div>
+                    <div class="job-detail-item"><strong>MIN CGPA</strong><span>${job.min_cgpa || 'None'}</span></div>
+                    <div class="job-detail-item"><strong>APPLICATIONS</strong><span>${appCount}</span></div>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-left: 20px;">
+                <button class="btn btn-small btn-info" onclick="viewApplications(${job.id})">
+                    📄 View Applications (${appCount})
+                </button>
+                <button class="btn btn-small btn-danger" onclick="deleteJob(${job.id})">
+                    🗑️ Delete Job
+                </button>
+            </div>
+        </div>
+        <div id="applications_${job.id}" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 2px solid #0066cc;">
+            <h4 style="color: #0066cc; margin-bottom: 15px;">Applications for this Job</h4>
+            <div id="applications_list_${job.id}"></div>
+        </div>
+    </div>`;
+            }).join('');
+
+            container.innerHTML = html;
+        }
+
+        // Show create job form
+        function showCreateJobForm() {
+            document.getElementById('createJobForm').style.display = 'block';
+        }
+
+        // Create new job
+        // Create new job
+        async function createNewJob() {
+            // Validate inputs
+            const role = document.getElementById('newJobRole').value.trim();
+            const company = document.getElementById('newJobCompany').value.trim();
+            const description = document.getElementById('newJobDescription').value.trim();
+            const skills = document.getElementById('newJobSkills').value.trim();
+            const location = document.getElementById('newJobLocation').value.trim();
+            const minPackage = document.getElementById('newJobPackageMin').value;
+            const maxPackage = document.getElementById('newJobPackageMax').value;
+            const minCGPA = document.getElementById('newJobMinCGPA').value;
+
+            if (!role || !company || !description || !skills || !location || !minPackage || !maxPackage) {
+                alert('⚠️ Please fill in all required fields');
+                return;
+            }
+
+            // Validate package range
+            if (parseFloat(minPackage) > parseFloat(maxPackage)) {
+                alert('⚠️ Minimum package cannot be greater than maximum package');
+                return;
+            }
+
+            // Calculate deadline (30 days from now)
+            const deadline = new Date();
+            deadline.setDate(deadline.getDate() + 30);
+            const deadlineStr = deadline.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+
+            const jobData = {
+                job_type: document.getElementById('newJobType').value,
+                role: role,
+                company: company,
+                description: description,
+                required_skills: skills.split(',').map(s => s.trim()).filter(s => s),
+                location: location,
+                package_min: parseFloat(minPackage),
+                package_max: parseFloat(maxPackage),
+                min_cgpa: parseFloat(minCGPA) || 0,
+                max_backlogs: 0,
+                eligible_streams: ['CSE', 'CSE-AIML', 'CSE-DS', 'ECE'],
+                total_positions: 10,
+                deadline: deadlineStr  // ✅ This is the correct format
+            };
+
+            console.log('Creating job with data:', jobData); // Debug
+
+            try {
+                const token = localStorage.getItem('auth_token');
+                if (!token) {
+                    alert('⚠️ Not authenticated. Please login again.');
+                    return;
+                }
+
+                const response = await fetch('http://localhost:5000/api/admin/jobs', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(jobData)
+                });
+
+                console.log('Response status:', response.status); // Debug
+
+                const result = await response.json();
+                console.log('Create job response:', result); // Debug
+
+                if (response.ok) {
+                    alert('✅ Job created successfully!');
+                    document.getElementById('createJobForm').style.display = 'none';
+
+                    // Clear form
+                    document.getElementById('newJobRole').value = '';
+                    document.getElementById('newJobCompany').value = '';
+                    document.getElementById('newJobDescription').value = '';
+                    document.getElementById('newJobSkills').value = '';
+                    document.getElementById('newJobLocation').value = '';
+                    document.getElementById('newJobPackageMin').value = '';
+                    document.getElementById('newJobPackageMax').value = '';
+                    document.getElementById('newJobMinCGPA').value = '';
+
+                    // Reload jobs
+                    await loadJobsAdmin();
+                } else {
+                    alert('❌ Failed to create job: ' + (result.error || result.message || 'Unknown error'));
+                    console.error('Error details:', result);
+                }
+            } catch (error) {
+                console.error('Error creating job:', error);
+                alert('❌ Error creating job: ' + error.message);
+            }
+        }
+
+        // Delete job
+        async function deleteJob(jobId) {
+            if (!confirm('Are you sure you want to delete this job posting?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:5000/api/admin/jobs/${jobId}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('✅ Job deleted successfully!');
+                    await loadJobsAdmin();
+                } else {
+                    alert('❌ Failed to delete job: ' + result.error);
+                }
+            } catch (error) {
+                alert('❌ Error deleting job: ' + error.message);
+            }
+        }
+
+        // View applications for a job
+        async function viewApplications(jobId) {
+            const container = document.getElementById(`applications_${jobId}`);
+            const listContainer = document.getElementById(`applications_list_${jobId}`);
+
+            // Toggle visibility
+            if (container.style.display === 'block') {
+                container.style.display = 'none';
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:5000/api/admin/applications?job_id=${jobId}`, {
+                    method: 'GET',
+                    headers: getAuthHeaders()
+                });
+
+                const applications = await response.json();
+
+                if (applications.length === 0) {
+                    listContainer.innerHTML = '<p style="color: #666;">No applications yet.</p>';
+                } else {
+                    listContainer.innerHTML = applications.map(app => `
+                <div style="background: #f8f9fa; padding: 15px; margin-bottom: 10px; border-radius: 8px; border-left: 4px solid ${app.status === 'selected' ? '#28a745' :
+                            app.status === 'shortlisted' ? '#ffc107' :
+                                app.status === 'rejected' ? '#dc3545' : '#0066cc'
+                        };">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: center;">
+                        <div>
+                            <strong style="color: #0066cc;">${app.student_name}</strong><br>
+                            <small>Roll: ${app.student_roll || 'N/A'}</small><br>
+                            <small>CGPA: ${app.student_cgpa || 'N/A'}</small>
+                        </div>
+                        <div>
+                            <strong>ATS Score:</strong> ${app.ats_score || 'Not checked'}%<br>
+                            <small>Applied: ${new Date(app.applied_date).toLocaleDateString()}</small>
+                        </div>
+                        <div>
+                            <strong>Status:</strong>
+                            <select onchange="updateApplicationStatus(${app.id}, this.value)" style="margin-top: 5px; padding: 5px; border-radius: 5px;">
+                                <option value="applied" ${app.status === 'applied' ? 'selected' : ''}>Applied</option>
+                                <option value="shortlisted" ${app.status === 'shortlisted' ? 'selected' : ''}>Shortlisted</option>
+                                <option value="selected" ${app.status === 'selected' ? 'selected' : ''}>Selected</option>
+                                <option value="rejected" ${app.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button class="btn btn-small btn-info" onclick="viewStudentDetails(${app.student_id})">
+                                👤 View Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+                }
+
+                container.style.display = 'block';
+
+            } catch (error) {
+                listContainer.innerHTML = '<p style="color: red;">Error loading applications</p>';
+                container.style.display = 'block';
+            }
+        }
+
+        // Update application status
+        async function updateApplicationStatus(appId, newStatus) {
+            try {
+                const response = await fetch(`http://localhost:5000/api/admin/applications/${appId}/update-status`, {
+                    method: 'PUT',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ status: newStatus })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(`✅ Application status updated to: ${newStatus}`);
+                } else {
+                    alert('❌ Failed to update status: ' + result.error);
+                }
+            } catch (error) {
+                alert('❌ Error updating status: ' + error.message);
+            }
+        }
+
+        // View student details
+        async function viewStudentDetails(studentId) {
+            try {
+                const response = await fetch(`http://localhost:5000/api/admin/students/${studentId}`, {
+                    method: 'GET',
+                    headers: getAuthHeaders()
+                });
+
+                const student = await response.json();
+
+                const details = `
+📋 STUDENT DETAILS
+
+Name: ${student.name || 'N/A'}
+Roll: ${student.roll_number || 'N/A'}
+Stream: ${student.stream || 'N/A'}
+CGPA: ${student.cgpa || 'N/A'}
+Email: ${student.email || 'N/A'}
+Phone: ${student.phone || 'N/A'}
+
+Skills: ${student.skills.map(s => s.name).join(', ') || 'None'}
+Projects: ${student.projects.length}
+Internships: ${student.internships.length}
+Certifications: ${student.certifications.length}
+
+Total Applications: ${student.applications.length}
+        `;
+
+                alert(details);
+
+            } catch (error) {
+                alert('❌ Error loading student details: ' + error.message);
+            }
+        }
+
+        function displayJobs(filter) {
+            const container = document.getElementById('jobsContainer');
+            const filtered = filter === 'all' ? jobsData : jobsData.filter(j => j.type === filter);
+            container.innerHTML = filtered.map((job) => {
+                const idx = jobsData.indexOf(job);
+                const userSkills = skills.map(s => s.toLowerCase());
+                const reqSkills = job.skills.map(s => s.toLowerCase());
+                const matchingSkills = reqSkills.filter(s => userSkills.some(us => us.includes(s) || s.includes(us)));
+                const hasMinSkills = matchingSkills.length >= Math.ceil(job.skills.length / 2);
+                return `<div class="job-card">
+                    <h3>${job.role}</h3>
+                    <div class="company">${job.company}</div>
+                    <p>${job.description}</p>
+                    <div class="job-details">
+                        <div class="job-detail-item"><strong>SKILLS REQUIRED</strong><span>${job.skills.join(', ')}</span></div>
+                        <div class="job-detail-item"><strong>LOCATION</strong><span>${job.location}</span></div>
+                        <div class="job-detail-item"><strong>PACKAGE</strong><span>${job.package}</span></div>
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn btn-small btn-info" onclick="toggleResumeUpload(${idx})">Upload Resume for ATS Check</button>
+                        <button id="applyBtn_${idx}" class="btn btn-small btn-danger" disabled onclick="applyJob(${idx})"> Insufficient Skills</button>
+
+                    </div>
+                    <div id="resume_upload_${idx}" class="resume-upload-job">
+                        <div class="upload-area" onclick="document.getElementById('jobResume_${idx}').click()">
+                            <p>📄 Upload Resume (PDF only for accurate skill detection)</p>
+                            <input type="file" id="jobResume_${idx}" accept=".pdf" onchange="analyzeJobResume(event, ${idx})">
+                        </div>
+                        <div id="job_resume_preview_${idx}" class="file-preview" style="display: none;"></div>
+                    </div>
+                    <div id="ats_${idx}"></div>
+                </div>`;
+            }).join('');
+        }
+
+        // function filterJobs(type) {
+        //     document.querySelectorAll('.job-filters button').forEach(b => b.classList.remove('active'));
+        //     event.target.classList.add('active');
+        //     displayJobs(type);
+        // }
+        function filterJobs(type) {
+            document.querySelectorAll('.job-filters button').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Check if admin
+            if (isAdminUser()) {
+                displayJobsAdmin(type);
+            } else {
+                displayJobs(type);
+            }
+        }
+
+        function toggleResumeUpload(idx) {
+            const uploadDiv = document.getElementById(`resume_upload_${idx}`);
+            if (uploadDiv.style.display === 'none' || uploadDiv.style.display === '') {
+                uploadDiv.style.display = 'block';
+            } else {
+                uploadDiv.style.display = 'none';
+            }
+        }
+
+        async function analyzeJobResume(e, idx) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            jobResumes[idx] = file;
+            const previewDiv = document.getElementById(`job_resume_preview_${idx}`);
+            previewDiv.style.display = 'block';
+            previewDiv.textContent = `Uploaded: ${file.name} - Extracting text from PDF...`;
+
+            let resumeText = '';
+            if (file.type === 'application/pdf') {
+                resumeText = await extractTextFromPDF(file);
+            } else {
+                const reader = new FileReader();
+                await new Promise((resolve) => {
+                    reader.onload = (event) => {
+                        resumeText = event.target.result;
+                        resolve();
+                    };
+                    reader.readAsText(file);
+                });
+            }
+
+            previewDiv.textContent = `Uploaded: ${file.name} - Analyzing skills...`;
+            setTimeout(() => {
+                previewDiv.textContent = `Uploaded: ${file.name} ✓`;
+                performDocumentATS(idx, file, resumeText);
+            }, 500);
+        }
+
+        function performDocumentATS(idx, file, resumeText) {
+            const job = jobsData[idx];
+
+            const technicalSkillsDatabase = ['Java', 'Python', 'JavaScript', 'C', 'C++', 'C#', 'TypeScript', 'PHP', 'Ruby', 'Swift', 'Kotlin', 'Go', 'Golang', 'Rust', 'Scala', 'R', 'MATLAB', 'Perl', 'Dart', 'Julia', 'HTML', 'HTML5', 'CSS', 'CSS3', 'SASS', 'SCSS', 'Bootstrap', 'Tailwind', 'Material-UI', 'React', 'ReactJS', 'Angular', 'Vue', 'Svelte', 'Next.js', 'Redux', 'Node.js', 'Express', 'Django', 'Flask', 'FastAPI', 'Spring', 'Hibernate', 'Laravel', 'Ruby on Rails', 'ASP.NET', '.NET', 'MySQL', 'PostgreSQL', 'MongoDB', 'Oracle', 'SQL', 'Redis', 'Firebase', 'Elasticsearch', 'AWS', 'Azure', 'GCP', 'Docker', 'Kubernetes', 'Jenkins', 'CI/CD', 'Terraform', 'Ansible', 'Android', 'iOS', 'React Native', 'Flutter', 'Machine Learning', 'Deep Learning', 'TensorFlow', 'PyTorch', 'Keras', 'Pandas', 'NumPy', 'NLP', 'Computer Vision', 'OpenCV', 'Hadoop', 'Spark', 'Kafka', 'Git', 'GitHub', 'GitLab', 'JIRA', 'Selenium', 'Cypress', 'Jest', 'JUnit', 'Postman', 'Figma', 'Adobe XD', 'Photoshop', 'Linux', 'Bash', 'REST API', 'GraphQL', 'Microservices', 'Agile', 'Scrum', 'OOP', 'Data Structures', 'Algorithms', 'OAuth', 'JWT', 'Blockchain', 'Unity', 'Problem Solving', 'Cloud Computing', 'DevOps', 'API Development', 'Web Development', 'Mobile Development', 'Full Stack', 'Frontend', 'Backend', 'Database Design', 'System Design', 'Software Testing', 'UI/UX Design', 'Technical Documentation', 'Code Review', 'Debugging', 'Version Control', 'Responsive Design', 'SEO'];
+
+            const searchText = resumeText
+                .toLowerCase()
+                .replace(/[^a-z0-9+\.\s]/g, ' ')
+                .replace(/\s+/g, ' ');
+            const detectedSkills = [];
+            const detectedSkillsSet = new Set();
+
+            technicalSkillsDatabase.forEach(skill => {
+                const skillLower = skill.toLowerCase();
+                const patterns = [skillLower, skillLower.replace(/\./g, ''), skillLower.replace(/\s+/g, ''), skillLower.replace(/-/g, ''), skillLower.replace(/\s+/g, '-')];
+                // const found = patterns.some(pattern => {
+                //     const regex = new RegExp(`\\b${pattern.replace(/[.*+?^${}()|[\]\\]/g, `\\{type: 'mnc', role: 'Software Developer', company: 'Google', description: 'Develop and maintain large-scale applications', skills: ['Java', 'Python', 'Cloud Computing', 'Problem Solving'], location: 'Bangalore, Hyderabad', package: '')}\\b`, 'i');
+                //     return regex.test(searchText) || searchText.includes(pattern);
+                const found = patterns.some(pattern => {
+                    const escaped = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const regex = new RegExp(`\\b${escaped}\\b`, 'i');
+                    return regex.test(searchText) || searchText.includes(pattern);
+
+                });
+
+                if (found) {
+                    const normalizedSkill = skill.trim();
+                    const normalizedLower = normalizedSkill.toLowerCase();
+                    if (!detectedSkillsSet.has(normalizedLower)) {
+                        detectedSkills.push(normalizedSkill);
+                        detectedSkillsSet.add(normalizedLower);
+                    }
+                }
+            });
+
+            detectedSkills.sort();
+
+            const matchingSkills = job.skills.filter(jobSkill =>
+                detectedSkills.some(detectedSkill =>
+                    detectedSkill.toLowerCase().includes(jobSkill.toLowerCase()) ||
+                    jobSkill.toLowerCase().includes(detectedSkill.toLowerCase()) ||
+                    detectedSkill.toLowerCase() === jobSkill.toLowerCase()
+                )
+            );
+
+            const missingSkills = job.skills.filter(jobSkill =>
+                !detectedSkills.some(detectedSkill =>
+                    detectedSkill.toLowerCase().includes(jobSkill.toLowerCase()) ||
+                    jobSkill.toLowerCase().includes(detectedSkill.toLowerCase()) ||
+                    detectedSkill.toLowerCase() === jobSkill.toLowerCase()
+                )
+            );
+
+            const matchPercent = job.skills.length > 0 ? Math.round((matchingSkills.length / job.skills.length) * 100) : 0;
+
+            let improvementsList = '';
+            if (detectedSkills.length === 0) {
+                improvementsList += '<li style="color: #dc3545;"><strong>No technical skills detected!</strong> Ensure your resume has a "Skills" section with technical skills listed.</li>';
+                improvementsList += '<li>Make sure your PDF is text-based (not scanned images)</li>';
+            } else {
+                if (detectedSkills.length < 5) improvementsList += '<li>Add more technical skills to strengthen your profile</li>';
+            }
+
+            if (missingSkills.length > 0) {
+                improvementsList += `<li><strong>Missing Required Skills:</strong> Add projects demonstrating: ${missingSkills.join(', ')}</li>`;
+            }
+
+            improvementsList += '<li>Use action verbs: Developed, Implemented, Designed, Built, Created</li>';
+            improvementsList += '<li>Include quantifiable achievements (e.g., "Improved performance by 30%")</li>';
+            improvementsList += '<li>Ensure ATS-friendly formatting (avoid complex tables, images in main content)</li>';
+
+            const result = `
+                <div class="ats-result">
+                    <h4>📊 Resume ATS Analysis for ${job.role} at ${job.company}</h4>
+                    <p><strong>Overall Match Score:</strong> <span style="font-size: 24px; color: ${matchPercent >= 70 ? '#28a745' : matchPercent >= 50 ? '#ffc107' : '#dc3545'}">${matchPercent}%</span></p>
+                    
+                    <p><strong>📄 Technical Skills Detected in Resume (${detectedSkills.length}):</strong></p>
+                    <div style="padding: 10px; background: #f8f9fa; border-radius: 5px; margin: 10px 0; max-height: 150px; overflow-y: auto; border: 1px solid #dee2e6;">
+                        ${detectedSkills.length > 0 ? detectedSkills.join(', ') : '<span style="color: #dc3545;">⚠️ No technical skills detected. Please ensure your PDF has a clear Skills section.</span>'}
+                    </div>
+                    
+                    <p><strong>✅ Matching Skills (${matchingSkills.length}/${job.skills.length}):</strong></p>
+                    <div style="padding: 10px; background: #d4edda; border-radius: 5px; margin: 10px 0; color: #155724; font-weight: 600;">
+                        ${matchingSkills.length > 0 ? matchingSkills.join(', ') : 'None - Add required skills'}
+                    </div>
+                    
+                    <p><strong>❌ Missing Required Skills:</strong></p>
+                    <div style="padding: 10px; background: #f8d7da; border-radius: 5px; margin: 10px 0; color: #721c24; font-weight: 600;">
+                        ${missingSkills.length > 0 ? missingSkills.join(', ') : '✓ All required skills present!'}
+                    </div>
+                    
+                    <p><strong>💡 Recommendations:</strong></p>
+                    <ul>${improvementsList}</ul>
+                    
+                    <p style="margin-top: 10px; padding: 10px; background: #e7f3ff; border-left: 4px solid #0066cc; border-radius: 5px;">
+                        <strong>💼 Verdict:</strong> ${matchPercent >= 70 ? '✓ Excellent match! Proceed with application.' :
+                    matchPercent >= 50 ? '⚠️ Moderate match. Consider adding missing skills.' :
+                        detectedSkills.length === 0 ? '❌ Resume not readable or missing skills section.' :
+                            '❌ Low match. Significant upskilling needed.'
+                }
+                    </p>
+                </div>
+            `;
+            document.getElementById(`ats_${idx}`).innerHTML = result;
+            const applyBtn = document.getElementById(`applyBtn_${idx}`);
+            if (!applyBtn) return;
+
+            if (matchPercent >= 70) {
+                applyBtn.disabled = false;
+                applyBtn.textContent = "Apply Now";
+                applyBtn.className = "btn btn-small btn-success";
+            }
+            else if (matchPercent >= 50) {
+                applyBtn.disabled = true;
+                applyBtn.textContent = "Improve Skills";
+                applyBtn.className = "btn btn-small btn-info";
+            }
+            else {
+                applyBtn.disabled = true;
+                applyBtn.textContent = "Insufficient Skills";
+                applyBtn.className = "btn btn-small btn-danger";
+            }
+
+        }
+
+        function applyJob(idx) {
+            alert(`Application submitted for ${jobsData[idx].role} at ${jobsData[idx].company}!`);
+        }
+
+        function submitIdea(e) {
+            e.preventDefault();
+            const idea = {
+                title: document.getElementById('ideaTitle').value,
+                domain: document.getElementById('ideaDomain').value,
+                problem: document.getElementById('ideaProblem').value,
+                solution: document.getElementById('ideaSolution').value,
+                tech: document.getElementById('ideaTech').value,
+                likes: 0,
+                liked: false
+            };
+            ideasData.push(idea);
+            displayIdeas();
+            e.target.reset();
+        }
+
+        function displayIdeas() {
+            const container = document.getElementById('ideasContainer');
+            container.innerHTML = ideasData.map((idea, idx) => `<div class="idea-card"><div class="idea-header"><div><h3>${idea.title}</h3><span class="idea-domain">${idea.domain}</span></div><button class="like-btn ${idea.liked ? 'liked' : ''}" onclick="likeIdea(${idx})">❤️ ${idea.likes}</button></div><p><strong>Problem:</strong> ${idea.problem}</p><p><strong>Solution:</strong> ${idea.solution}</p><p><strong>Technology:</strong> ${idea.tech}</p></div>`).join('');
+        }
+
+        function likeIdea(idx) {
+            ideasData[idx].liked = !ideasData[idx].liked;
+            ideasData[idx].likes += ideasData[idx].liked ? 1 : -1;
+            displayIdeas();
+        }
+
+        let skillChart, placementChart, companyChart, branchChart, yearChart, packageChart, eligibilityChart;
+
+        function updateSkillChart() {
+            const ctx = document.getElementById('skillChart');
+            if (!ctx) return;
+            if (skillChart) skillChart.destroy();
+            if (skills.length === 0) return;
+            skillChart = new Chart(ctx, {
+                type: 'pie',
+                data: { labels: skills, datasets: [{ data: skills.map(() => 1), backgroundColor: ['#0066cc', '#003d7a', '#3399ff', '#0052a3', '#66b3ff', '#004080', '#99ccff', '#001f3f'] }] },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+
+        function initCharts() {
+            const pc = document.getElementById('placementChart');
+            if (pc && !placementChart) {
+                placementChart = new Chart(pc, { type: 'doughnut', data: { labels: ['Placed', 'Not Placed'], datasets: [{ data: [245, 55], backgroundColor: ['#28a745', '#dc3545'] }] }, options: { responsive: true, plugins: { legend: { position: 'bottom' } } } });
+            }
+            const cc = document.getElementById('companyChart');
+            if (cc && !companyChart) {
+                companyChart = new Chart(cc, { type: 'bar', data: { labels: ['Google', 'Microsoft', 'Amazon', 'TCS', 'Infosys', 'Wipro'], datasets: [{ label: 'Students Placed', data: [35, 42, 28, 55, 45, 40], backgroundColor: '#0066cc' }] }, options: { responsive: true, plugins: { legend: { display: false } } } });
+            }
+            const bc = document.getElementById('branchChart');
+            if (bc && !branchChart) {
+                branchChart = new Chart(bc, { type: 'bar', data: { labels: ['CSE', 'ECE', 'EEE', 'MECH', 'CIVIL'], datasets: [{ label: 'Placement %', data: [92, 85, 78, 70, 65], backgroundColor: '#003d7a' }] }, options: { responsive: true, scales: { y: { beginAtZero: true, max: 100 } } } });
+            }
+            const yc = document.getElementById('yearChart');
+            if (yc && !yearChart) {
+                yearChart = new Chart(yc, { type: 'line', data: { labels: ['2020', '2021', '2022', '2023', '2024'], datasets: [{ label: 'Placements', data: [180, 195, 210, 230, 245], borderColor: '#0066cc', backgroundColor: 'rgba(0, 102, 204, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true } });
+            }
+            const pkgc = document.getElementById('packageChart');
+            if (pkgc && !packageChart) {
+                packageChart = new Chart(pkgc, { type: 'bar', data: { labels: ['0-5 LPA', '5-10 LPA', '10-15 LPA', '15-20 LPA', '20+ LPA'], datasets: [{ label: 'Number of Students', data: [45, 85, 60, 35, 20], backgroundColor: '#3399ff' }] }, options: { responsive: true } });
+            }
+            const ec = document.getElementById('eligibilityChart');
+            if (ec && !eligibilityChart) {
+                eligibilityChart = new Chart(ec, { type: 'pie', data: { labels: ['Eligible', 'Not Eligible'], datasets: [{ data: [280, 20], backgroundColor: ['#0066cc', '#dc3545'] }] }, options: { responsive: true, plugins: { legend: { position: 'bottom' } } } });
+            }
+        }
+
+    </script>
+</body>
+
+</html>
