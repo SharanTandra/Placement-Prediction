@@ -918,6 +918,8 @@
     </div>
 
     <script>
+        // Add this at the beginning of your script section
+        const API_BASE = 'http://localhost:5000/api';
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
         let studentData = { skills: [], certifications: [], internships: [], projects: [], resume: null, profilePic: null };
@@ -1460,7 +1462,7 @@
                     throw new Error('No authentication token found');
                 }
 
-                const response = await fetch('http://localhost:5000/api/admin/jobs', {
+                const response = await fetch(`${API_BASE}/admin/jobs`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1521,7 +1523,7 @@
                 ➕ Create New Job Posting
             </button>
         </div>
-        
+
         <div id="createJobForm" style="display: none; background: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
             <h3 style="color: #0066cc; margin-bottom: 20px;">Create New Job</h3>
             <div class="form-group">
@@ -1574,7 +1576,7 @@
 
             // Display existing jobs
             html += filtered.map((job, index) => {
-                // Safely access properties with fallbacks - THIS PREVENTS ERRORS
+                // Safely access properties with fallbacks
                 const jobType = job.type || job.job_type || 'unknown';
                 const skills = Array.isArray(job.skills) ? job.skills : [];
                 const appCount = job.applications_count || 0;
@@ -1621,7 +1623,7 @@
         }
 
         // Create new job
-        // Create new job
+
         async function createNewJob() {
             // Validate inputs
             const role = document.getElementById('newJobRole').value.trim();
@@ -1662,7 +1664,7 @@
                 max_backlogs: 0,
                 eligible_streams: ['CSE', 'CSE-AIML', 'CSE-DS', 'ECE'],
                 total_positions: 10,
-                deadline: deadlineStr  // ✅ This is the correct format
+                deadline: deadlineStr
             };
 
             console.log('Creating job with data:', jobData); // Debug
@@ -1674,7 +1676,7 @@
                     return;
                 }
 
-                const response = await fetch('http://localhost:5000/api/admin/jobs', {
+                const response = await fetch(`${API_BASE}/admin/jobs`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1705,7 +1707,18 @@
                     // Reload jobs
                     await loadJobsAdmin();
                 } else {
-                    alert('❌ Failed to create job: ' + (result.error || result.message || 'Unknown error'));
+                    // Show detailed error message
+                    let errorMsg = '❌ Failed to create job: ';
+                    if (result.error) {
+                        errorMsg += result.error;
+                    } else if (result.message) {
+                        errorMsg += result.message;
+                    } else if (result.details) {
+                        errorMsg += JSON.stringify(result.details);
+                    } else {
+                        errorMsg += 'Unknown error';
+                    }
+                    alert(errorMsg);
                     console.error('Error details:', result);
                 }
             } catch (error) {
@@ -2075,8 +2088,53 @@ Total Applications: ${student.applications.length}
 
         }
 
-        function applyJob(idx) {
-            alert(`Application submitted for ${jobsData[idx].role} at ${jobsData[idx].company}!`);
+        async function applyJob(idx) {
+            // 1. Get the job details
+            const job = jobsData[idx];
+            const applyBtn = document.getElementById(`applyBtn_${idx}`);
+
+            console.log("Attempting to apply for:", job); // Debug log
+
+            // 2. Validation: Check if Job ID exists
+            if (!job || !job.id) {
+                alert("⚠️ Error: This job ID is missing. Please refresh the page to load fresh data.");
+                console.error("Job ID missing:", job);
+                return;
+            }
+
+            // 3. UI: Disable button
+            applyBtn.disabled = true;
+            applyBtn.textContent = "Applying...";
+
+            try {
+                // 4. Send Request
+                const response = await fetch(`${API_BASE}/jobs/${job.id}/apply`, {
+                    method: 'POST',
+                    headers: getAuthHeaders()
+                });
+
+                // 5. Handle Response
+                const result = await response.json();
+                console.log("Server Response:", result); // Debug log
+
+                if (response.ok) {
+                    // Success
+                    alert(`✅ Successfully applied for ${job.role} at ${job.company}!`);
+                    applyBtn.textContent = "Applied";
+                    applyBtn.className = "btn btn-small btn-success";
+                } else {
+                    // Server Error (e.g., Already applied)
+                    alert(`⚠️ ${result.error || result.message}`);
+                    applyBtn.disabled = false;
+                    applyBtn.textContent = "Apply Now";
+                }
+            } catch (error) {
+                // 6. Network Error Handling
+                console.error("Network Error Details:", error);
+                alert(`❌ Network Error: Make sure python app.py is running! \nDetails: ${error.message}`);
+                applyBtn.disabled = false;
+                applyBtn.textContent = "Apply Now";
+            }
         }
 
         function submitIdea(e) {
